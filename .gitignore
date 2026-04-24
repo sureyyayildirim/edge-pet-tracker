@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+
+# Arduino IDE
+*.ino.eep
+*.ino.bin
+*.ino.bootloader.bin
+*.ino.partitions.bin
+*.elf
+*.map
+build/
+dist/
+
+# VSCode
+.vscode/
+
+# JetBrains
+.idea/
+
+# Python ML tarafı için
+venv/
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# Secrets
+.env
