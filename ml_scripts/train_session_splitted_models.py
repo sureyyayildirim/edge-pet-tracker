@@ -56,46 +56,46 @@ def main():
     print("Test rows:", len(test_df))
     print("Classes:", class_names)
 
-    knn = KNeighborsClassifier(n_neighbors=5)
+    knn = KNeighborsClassifier(n_neighbors=3)
 
-    # mlp = MLPClassifier(
-    #     hidden_layer_sizes=(32,),
-    #     learning_rate_init=0.001,
-    #     activation="relu",
-    #     max_iter=500,
-    #     random_state=42,
-    # ) 
+    mlp = MLPClassifier(
+        hidden_layer_sizes=(32,),
+        learning_rate_init=0.001,
+        activation="relu",
+        max_iter=500,
+        random_state=42,
+    ) 
 
     # ----HYPERPARAMETER TUNING FOR MLP MODEL----
 
-    print("\nRunning GridSearch for MLP...")
+    # print("\nRunning GridSearch for MLP...")
 
-    param_grid = {
-        "hidden_layer_sizes": [(8,), (16,), (32,), (16, 8)],
-        "learning_rate_init": [0.001, 0.0001],
-        "early_stopping": [True,False],
-        "max_iter": [500, 800, 1000],
-    }
+    # param_grid = {
+    #     "hidden_layer_sizes": [(8,), (16,), (32,), (16, 8)],
+    #     "learning_rate_init": [0.001, 0.0001],
+    #     "early_stopping": [True,False],
+    #     "max_iter": [500, 800, 1000],
+    # }
 
-    grid = GridSearchCV(
-        MLPClassifier(
-            activation="relu",
-            random_state=42,
-        ),
-        param_grid,
-        cv=5,
-        n_jobs=-1,
-        verbose=1
-    )
+    # grid = GridSearchCV(
+    #     MLPClassifier(
+    #         activation="relu",
+    #         random_state=42,
+    #     ),
+    #     param_grid,
+    #     cv=3,
+    #     n_jobs=-1,
+    #     verbose=1
+    # )
 
-    grid.fit(X_train, y_train)
+    # grid.fit(X_train, y_train)
 
-    print("\nBest Parameters:", grid.best_params_)
-    print("Best CV Score:", grid.best_score_)
+    # print("\nBest Parameters:", grid.best_params_)
+    # print("Best CV Score:", grid.best_score_)
 
-    mlp = grid.best_estimator_
+    # mlp = grid.best_estimator_
 
-    evaluate_model("Session Splitted Dataset - KNN k=5", knn, X_train, y_train, X_test, y_test, class_names)
+    evaluate_model("Session Splitted Dataset - KNN k=3", knn, X_train, y_train, X_test, y_test, class_names)
     evaluate_model("Session Splitted Dataset - MLP 3-8-3", mlp, X_train, y_train, X_test, y_test, class_names)
 
 
