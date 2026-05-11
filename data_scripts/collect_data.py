@@ -1,3 +1,5 @@
+# This script reads RSSI values from the ESP32 serial output
+# and saves the collected measurements into a CSV file.
 import serial
 import csv
 from datetime import datetime
