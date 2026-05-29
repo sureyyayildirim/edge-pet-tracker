@@ -163,6 +163,70 @@ function updateDashboard(data){
 
 }
 
+
+// {// TEST
+// const testSequence = [
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },
+//     { stable_prediction:"feeding_area", feeding_confirmed:true, feeding_time_24h_min:1, anomaly:"normal", confidence:93 },
+//     { stable_prediction:"feeding_area", feeding_confirmed:true, feeding_time_24h_min:2, anomaly:"normal", confidence:94 },
+//     { stable_prediction:"feeding_area", feeding_confirmed:true, feeding_time_24h_min:3, anomaly:"normal", confidence:95 },
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:3, anomaly:"normal", confidence:92 },
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:3, anomaly:"normal", confidence:91 },
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },    
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },    
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },    
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },    
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"kitchen", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },    
+//     { stable_prediction:"kitchen", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"kitchen", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },    
+//     { stable_prediction:"kitchen", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"bedroom", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },    
+//     { stable_prediction:"bedroom", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"bedroom", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },    
+//     { stable_prediction:"bedroom", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"bedroom", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },    
+//     { stable_prediction:"bedroom", feeding_confirmed:true, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },   
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"living_room", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },    
+//     { stable_prediction:"living_room", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"living_room", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },    
+//     { stable_prediction:"living_room", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:90 },
+//     { stable_prediction:"living_room", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },
+//     { stable_prediction:"feeding_area", feeding_confirmed:false, feeding_time_24h_min:0, anomaly:"normal", confidence:91 },    
+
+// ];
+
+// let index = 0;
+
+// setInterval(() => {
+
+//     updateDashboard(testSequence[index]);
+
+//     console.log(
+//         "Test:",
+//         testSequence[index],
+//         "Last Feeding Activity:",
+//         lastFeedingActivity
+//     );
+
+//     index++;
+
+//     if(index >= testSequence.length){
+//         index = 0;
+//     }
+
+// }, 3000);
+
+// console.log("script.js çalıştı");
+//}
+
 const brokerUrl = "wss://broker.hivemq.com:8884/mqtt";
 const topic = "pettracker/data";
 
