@@ -11,6 +11,10 @@
 build/
 dist/
 
+# Tinyml
+tinyml/tf_model/
+*.pb
+
 # VSCode
 .vscode/
 

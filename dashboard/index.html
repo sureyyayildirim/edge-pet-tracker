@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Pet Dashboard</title>
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<h1>Indoor Pet Tracking Dashboard</h1>
+
+<div class="main">
+
+    <div class="house">
+        <div id="petMarker">🐈</div>
+    </div>
+
+    <div class="info-panel">
+
+        <p><b>Current Location:</b> <span id="location">Living Room</span></p>
+
+        <p><b>Behavior Status:</b> <span id="behavior">Normal</span></p>
+
+        <p><b>Feeding Time:</b> <span id="feedingTime">0 min</span></p>
+
+        <p><b>Last Feeding Activity:</b> <span id="lastFeeding">-</span></p>
+
+        <p><b>Anomaly:</b> <span id="anomaly">normal</span></p>
+
+        <p><b>Confidence:</b> <span id="confidence">-</span></p>
+
+        <p><b>Last Update:</b> <span id="update">-</span></p>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+
+</body>
+
+</html>
