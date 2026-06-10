@@ -88,7 +88,7 @@ The system consists of:
 The ESP32 firmware is responsible for BLE scanning, RSSI collection, ESP-NOW communication, and TinyML inference. 
 Receiver nodes forward RSSI measurements to the master node, while the master node performs RSSI fingerprint generation and on-device localization.
 
-A simplified BLE scanner example is available in:
+We provided the C/C++ source code in Arduino IDE, which is available at:
 
 `firmware/examples/ble_scanner/`
 
@@ -107,9 +107,47 @@ RSSI fingerprints were collected from:
 
 Both stationary and dynamic movement sessions were recorded.
 
-- tablo eklenecek.
+### Raw Session Sample
 
-# Training and Testin Machine Learning Models
+Example of RSSI measurements collected directly from ESP32 receiver nodes before preprocessing.
+
+| timestamp_ms | rssi_living | rssi_kitchen | rssi_bedroom | label | session | note |
+|-------------|------------|-------------|-------------|--------|---------|------|
+| 2940 | -82 | -110 | -110 | living_room | S01 | sofa_near |
+| 5154 | -79 | -91 | -110 | living_room | S01 | sofa_near |
+| 7369 | -73 | -91 | -110 | living_room | S01 | sofa_near |
+| 9583 | -73 | -110 | -110 | living_room | S01 | sofa_near |
+| 11797 | -73 | -99 | -110 | living_room | S01 | sofa_near |
+
+### Preprocessed Dataset Sample
+
+After cleaning, label encoding, and feature scaling, the dataset is transformed into the format used for machine learning training.
+
+| rssi_living | rssi_kitchen | rssi_bedroom | label |
+|------------|-------------|-------------|-------|
+| -0.127 | 1.582 | -0.680 | 1 |
+| 0.379 | -1.012 | -0.680 | 0 |
+| -0.541 | 1.730 | -0.680 | 1 |
+| 0.563 | 0.915 | -0.680 | 0 |
+| 0.701 | 0.100 | -0.680 | 0 |
+
+The raw RSSI measurements are first collected from multiple ESP32 receivers and labeled according to the pet's actual location.
+After preprocessing, RSSI features are scaled and labels are encoded, producing the final fingerprint dataset used for training and evaluating the localization models.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Training and Testing Machine Learning Models
 
 After data collection, RSSI measurements from all ESP32 nodes were merged into a fingerprint dataset and labeled according to the pet's location.
 
@@ -123,7 +161,168 @@ Several machine learning algorithms were evaluated during experimentation, inclu
 
 <img width="679" height="359" alt="Screenshot 2026-06-10 at 16 49 54" src="https://github.com/user-attachments/assets/d30080ca-f20b-40ec-8b7d-8f8c90db4c5c" />
 
+
 The MLP model was selected for deployment due to its strong generalization performance and compatibility with TinyML deployment on ESP32 devices.
+
+### Selected Model Performance
+
+The confusion matrix below summarizes the performance of the selected MLP model on the final evaluation dataset.
+
+<img width="494" height="458" alt="WhatsApp Image 2026-06-10 at 5 39 33 PM" src="https://github.com/user-attachments/assets/97fa3718-8d2f-4bed-9625-34e325f51191" />
+
+
+
+The confusion matrix shows that most samples were classified correctly across all indoor locations.
+The kitchen class achieved perfect recall, while the living room and feeding area classes also demonstrated strong classification performance.
+Most misclassifications occurred between the bedroom and kitchen classes, which is expected due to similar RSSI patterns observed in neighboring indoor areas.
+
+### Classification Metrics
+
+<img width="820" height="230" alt="WhatsApp Image 2026-06-10 at 5 38 53 PM" src="https://github.com/user-attachments/assets/c478aaf4-a234-4d24-bd3f-768dc8fb83c7" />
+
+
+
+The selected MLP model achieved consistently high precision, recall, and F1-scores across all classes.
+The feeding area class obtained perfect precision, while the living room class achieved the highest overall balanced performance.
+These results indicate that BLE RSSI fingerprinting combined with TinyML can provide reliable room-level localization in real indoor environments.
+
+# Deploying TinyML on ESP32
+
+The final localization model was trained using Scikit-Learn and then converted into a format suitable for deployment on ESP32 devices.
+
+We followed the deployment process according to the TinyML pipeline shown below:
+
+```text
+RSSI Dataset
+      │
+      ▼
+Train MLP Model
+      │
+      ▼
+TensorFlow Model
+      │
+      ▼
+TensorFlow Lite (.tflite)
+      │
+      ▼
+model_data.h
+      │
+      ▼
+ESP32 Deployment
+      │
+      ▼
+Real-Time Inference
+```
+
+After deployment, the ESP32 master node performs localization inference directly on-device using TensorFlow Lite Micro, eliminating the need for cloud-based processing.
+
+# Dashboard
+
+The system includes a lightweight MQTT-based dashboard for monitoring localization results in real time.
+
+The ESP32 master node publishes prediction results through MQTT, while the dashboard subscribes to these messages and updates the interface automatically.
+
+The dashboard provides:
+
+<img width="573" height="614" alt="WhatsApp Image 2026-06-10 at 5 46 06 PM" src="https://github.com/user-attachments/assets/e1e7d401-7ce4-4793-831f-1c856c8e1fb9" />
+
+### Notes:
+- The dashboard-enabled firmware is available in:
+
+`Firmware/master_esp32/master_esp32_tinyml_with_dashboard.ino`
+
+- A dashboard-free deployment version is also provided for standalone TinyML operation:
+
+`Firmware/master_esp32/master_esp32_tinyml_deploy.ino`
+
+# Repository Structure
+
+```text
+edge-pet-tracker
+│
+├── Firmware
+│   │
+│   ├── ble_scanner
+│   │   ├── ble_scanner_bedroom_test.ino
+│   │   └── espnow_rssi_master_test.ino
+│   │
+│   ├── master_esp32
+│   │   ├── master_esp32_tinyml_deploy.ino
+│   │   ├── master_esp32_tinyml_with_dashboard.ino
+│   │   └── model_data.h
+│   │
+│   └── slave_esp32
+│       ├── slave_bedroom_tinyml_deploy.ino
+│       ├── slave_bedroom_tinyml_with_dashboard.ino
+│       ├── slave_kitchen_tinyml_deploy.ino
+│       └── slave_kitchen_tinyml_with_dashboard.ino
+│
+├── dashboard
+│   ├── index.html
+│   ├── script.js
+│   ├── style.css
+│   └── images/
+│
+├── data
+│   └── processing
+│       ├── collect_data.py
+│       ├── create_dataset.py
+│       └── preprocess_dataset.py
+│
+├── tinyml
+│   ├── convert_sklearn_to_tf.py
+│   ├── convert_tf_to_tflite.py
+│   └── mlp_3_8_4_model.tflite
+│
+├── requirements.txt
+├── LICENSE
+└── README.md
+```
+
+### Folder Description
+
+| Folder             | Description                                                                                         |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| `Firmware/`        | ESP32 firmware for BLE scanning, ESP-NOW communication, TinyML inference, and dashboard integration |
+| `dashboard/`       | MQTT-based web dashboard for real-time monitoring                                                   |
+| `data/processing/` | Scripts for data collection, dataset creation, and preprocessing                                    |
+| `tinyml/`          | TinyML model conversion pipeline and TensorFlow Lite model                                          |
+
+
+# Acknowledgements
+
+This project was inspired by the Cat Localizer project developed by Filip Sikora.
+
+The original project demonstrates BLE-based indoor pet localization using multiple receivers and RSSI measurements. It served as an important reference during the early design phase of this work.
+
+Building upon this idea, the proposed system introduces several extensions, including:
+
+- TinyML-based edge inference on ESP32
+- TensorFlow Lite Micro deployment
+- ESP-NOW communication between nodes
+- Feeding area detection
+- Stationary behavior analysis
+- Cloud-independent localization
+
+Original project:
+
+https://github.com/filipsPL/cat-localizer
+
+# Authors
+
+This repository contains the implementation developed for the undergraduate Capstone Project conducted in the Department of Computer Engineering at Istinye University.
+
+**Project Team**
+
+- Ahsen Dursun
+- Süreyya Yıldırım
+- Ebru Çepni
+
+**Institution**
+
+Department of Computer Engineering  
+Istinye University  
+Istanbul, Türkiye
 
 
 
